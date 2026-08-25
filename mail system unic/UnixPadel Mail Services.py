@@ -13,6 +13,13 @@ from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
 from email.header import Header
 
+try:
+    from updater import APP_VERSION, start_silent_auto_update
+except ImportError:
+    APP_VERSION = "5.2.0"
+    def start_silent_auto_update(status_callback=None, app_instance=None):
+        pass
+
 DB_CONFIG = {
     "host": "b5l1shhnklxmq4ogmpjc-mysql.services.clever-cloud.com",
     "port": 21446,
@@ -68,7 +75,7 @@ EMAIL_REGEX = re.compile(r"^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$")
 TRANSLATIONS = {
     "tr": {
         # General / Common
-        "app_title": "Unixpadel IT Mail Services — v5.2",
+        "app_title": f"Unixpadel IT Mail Services — v{APP_VERSION}",
         "save": "💾  Kaydet",
         "select_file": "Dosya Seç",
         "not_selected": "Henüz seçilmedi",
@@ -179,7 +186,7 @@ TRANSLATIONS = {
     },
     "en": {
         # General / Common
-        "app_title": "Unixpadel IT Mail Services — v5.2",
+        "app_title": f"Unixpadel IT Mail Services — v{APP_VERSION}",
         "save": "💾  Save",
         "select_file": "Select File",
         "not_selected": "Not selected yet",
@@ -377,6 +384,18 @@ class UnixpadelApp(ctk.CTk):
         else:
             self.show_login_screen()
         self.protocol("WM_DELETE_WINDOW", self.on_close)
+
+        # Arka planda sessiz otomatik güncelleme kontrolü
+        start_silent_auto_update(status_callback=self.update_version_label, app_instance=self)
+
+    def update_version_label(self, status_text: str):
+        def _update():
+            if hasattr(self, 'version_lbl') and self.version_lbl.winfo_exists():
+                self.version_lbl.configure(text=status_text)
+        try:
+            self.after(0, _update)
+        except Exception:
+            pass
 
 
     def _change_lang_login(self, choice):
@@ -749,7 +768,7 @@ class UnixpadelApp(ctk.CTk):
             btn.pack(fill="x", padx=10, pady=2)
             self._nav_btns[key] = btn
 
-                self.lang_var = ctk.StringVar(value=self.settings.get("language", "tr"))
+        self.lang_var = ctk.StringVar(value=self.settings.get("language", "tr"))
         lang_cb_main = ctk.CTkOptionMenu(
             self._sidebar,
             variable=self.lang_var,
@@ -763,7 +782,8 @@ class UnixpadelApp(ctk.CTk):
         )
         lang_cb_main.pack(side="bottom", pady=10)
 
-        ctk.CTkLabel(self._sidebar, text="v5.2", font=F["badge"], text_color="#3d6199").pack(side="bottom", pady=6)
+        self.version_lbl = ctk.CTkLabel(self._sidebar, text=f"v{APP_VERSION}", font=F["badge"], text_color="#3d6199")
+        self.version_lbl.pack(side="bottom", pady=6)
 
         ctk.CTkButton(
             self._sidebar,
