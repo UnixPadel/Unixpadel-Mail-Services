@@ -38,9 +38,10 @@ jobs:
           cd "mail system unic"
           pyinstaller --noconfirm "UnixPadel Mail Services.spec"
 
-      - name: Create & Publish GitHub Release
+      - name: Create & Publish GitHub Release to Public Repo
         uses: softprops/action-gh-release@v2
         with:
+          repository: UnixPadel/Unixpadel-Mail-Services-Releases
           tag_name: ${{ github.ref_type == 'tag' && github.ref_name || github.event.inputs.version }}
           name: UnixPadel Mail Services ${{ github.ref_type == 'tag' && github.ref_name || github.event.inputs.version }}
           draft: false
@@ -48,4 +49,4 @@ jobs:
           files: |
             mail system unic/dist/UnixPadel Mail Services.exe
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}

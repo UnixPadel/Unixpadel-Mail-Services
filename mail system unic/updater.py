@@ -12,8 +12,8 @@ import urllib.request
 import subprocess
 import threading
 
-APP_VERSION = "5.2.1"
-GITHUB_REPO = "UnixPadel/Unixpadel-Mail-Services"
+APP_VERSION = "5.2.0"
+GITHUB_REPO = "UnixPadel/Unixpadel-Mail-Services-Releases"
 RELEASE_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
 def parse_version(v_str: str):
