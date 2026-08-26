@@ -12,7 +12,7 @@ import urllib.request
 import subprocess
 import threading
 
-APP_VERSION = "5.2.2"
+APP_VERSION = "5.2.3"
 GITHUB_REPO = "UnixPadel/Unixpadel-Mail-Services-Releases"
 RELEASE_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
 
