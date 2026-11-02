@@ -1,12 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
 
+datas, binaries, hiddenimports = collect_all('customtkinter')
+
+hiddenimports += ['pymysql', 'updater', 'pandas', 'openpyxl', 'urllib.request', 'socket']
+
+# dns.resolver dinamik import edildiği için PyInstaller onu kendiliğinden bulamaz;
+# eksik olursa MX doğrulaması ve DNS sağlık testi yalnızca exe'de sessizce kapanır.
+hiddenimports += ['dns', 'dns.resolver', 'dns.rdatatype', 'dns.exception']
 
 a = Analysis(
     ['UnixPadel Mail Services.py'],
     pathex=[],
-    binaries=[],
-    datas=[],
-    hiddenimports=['pymysql', 'updater', 'customtkinter', 'pandas', 'openpyxl', 'urllib.request'],
+    binaries=binaries,
+    datas=datas,
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -36,3 +44,4 @@ exe = EXE(
     codesign_identity=None,
     entitlements_file=None,
 )
+

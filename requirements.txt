@@ -1,4 +1,10 @@
-customtkinter
-pandas
-pymysql
-openpyxl
+# Sürümler sabitlenmiştir: CI her derlemede en güncel paketi çekerse
+# uygulama bir gün habersiz kırılır.
+customtkinter==5.2.2
+pandas==3.0.2
+PyMySQL==1.2.0
+openpyxl==3.1.5
+
+# MX doğrulaması ve DNS sağlık denetimi (SPF/DKIM/DMARC) için gerekli.
+# Kurulu değilse uygulama çalışır ama bu iki özellik devre dışı kalır.
+dnspython==2.8.0
